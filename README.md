@@ -39,6 +39,4 @@ This application consists of 8 integrated lab modules:
    ```
 5. **Open your browser** and visit: `http://127.0.0.1:5000`
 
-## Deployment 🚀
 
-This project is configured to be deployed on Vercel as a Serverless Function. Simply connect your GitHub repository to Vercel, and it will automatically detect the `vercel.json` and `requirements.txt` to build and deploy the app.
