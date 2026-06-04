@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Campus Information System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo-box">SC</div>
+                <div class="logo-text">
+                    <h2>Smart Campus</h2>
+                    <p>Info System</p>
+                </div>
+            </div>
+            <div class="sidebar-label">Modules</div>
+            <nav class="nav-menu">
+                <button class="nav-btn active" data-target="dashboard"><i class="ph ph-squares-four"></i> Dashboard</button>
+                <button class="nav-btn" data-target="registration"><i class="ph ph-graduation-cap"></i> Student Registration</button>
+                <button class="nav-btn" data-target="enrollment"><i class="ph ph-book-open"></i> Course Enrollment</button>
+                <button class="nav-btn" data-target="records"><i class="ph ph-users"></i> Student Records</button>
+                <button class="nav-btn" data-target="search-sort"><i class="ph ph-magnifying-glass"></i> Search & Sort</button>
+                <button class="nav-btn" data-target="fees"><i class="ph ph-calculator"></i> Fee Calculator</button>
+                <button class="nav-btn" data-target="academic-records"><i class="ph ph-clipboard-text"></i> Academic Records</button>
+                <button class="nav-btn" data-target="directory"><i class="ph ph-tree-structure"></i> Directory Scanner</button>
+                <button class="nav-btn" data-target="analytics"><i class="ph ph-chart-bar"></i> Performance Analytics</button>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="top-header">
+                <i class="ph ph-sidebar-simple" id="sidebar-toggle" style="cursor:pointer; font-size:1.2rem; transition:color 0.2s;" title="Toggle Sidebar" onmouseover="this.style.color='#4f46e5'" onmouseout="this.style.color='var(--text-secondary)'"></i>
+                <span>Smart Campus Information System</span>
+            </header>
+
+            <div class="content-wrapper">
+
+                <!-- Dashboard -->
+                <section id="dashboard" class="view-section active">
+                    <h1 class="page-title">Dashboard</h1>
+                    <p class="page-subtitle">Welcome to the Smart Campus Information System.</p>
+                    <div class="dashboard-grid">
+                        <div class="dash-card" onclick="document.querySelector('[data-target=\'registration\']').click()">
+                            <i class="ph ph-graduation-cap text-purple"></i>
+                            <h3>Student Registration</h3>
+                            <p>Compute grades from scores</p>
+                        </div>
+                        <div class="dash-card" onclick="document.querySelector('[data-target=\'enrollment\']').click()">
+                            <i class="ph ph-book-open text-purple"></i>
+                            <h3>Course Enrollment</h3>
+                            <p>Enroll in up to 5 courses</p>
+                        </div>
+                        <div class="dash-card" onclick="document.querySelector('[data-target=\'records\']').click()">
+                            <i class="ph ph-users text-purple"></i>
+                            <h3>Student Records</h3>
+                            <p>Manage records & event sets</p>
+                        </div>
+                        <div class="dash-card" onclick="document.querySelector('[data-target=\'search-sort\']').click()">
+                            <i class="ph ph-magnifying-glass text-purple"></i>
+                            <h3>Search & Sort</h3>
+                            <p>Bubble sort, linear & binary</p>
+                        </div>
+                        <div class="dash-card" onclick="document.querySelector('[data-target=\'fees\']').click()">
+                            <i class="ph ph-calculator text-purple"></i>
+                            <h3>Fee Calculator</h3>
+                            <p>Tuition, hostel, transport</p>
+                        </div>
+                        <div class="dash-card" onclick="document.querySelector('[data-target=\'academic-records\']').click()">
+                            <i class="ph ph-clipboard-text text-purple"></i>
+                            <h3>Academic Records</h3>
+                            <p>Marks & class report</p>
+                        </div>
+                        <div class="dash-card" onclick="document.querySelector('[data-target=\'directory\']').click()">
+                            <i class="ph ph-tree-structure text-purple"></i>
+                            <h3>Directory Scanner</h3>
+                            <p>Simulated folder tree</p>
+                        </div>
+                        <div class="dash-card" onclick="document.querySelector('[data-target=\'analytics\']').click()">
+                            <i class="ph ph-chart-bar text-purple"></i>
+                            <h3>Performance Analytics</h3>
+                            <p>Subject-wise top performers</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 1. Student Registration -->
+                <section id="registration" class="view-section">
+                    <h1 class="page-title">Student Registration</h1>
+                    <p class="page-subtitle">Register students and evaluate grades automatically.</p>
+                    <div class="card">
+                        <h3 class="card-title">Register Student</h3>
+                        <form id="register-form" class="form-row">
+                            <div class="form-group">
+                                <label>Student Name</label>
+                                <input type="text" id="reg-name" required placeholder="e.g. Arjun">
+                            </div>
+                            <div class="form-group">
+                                <label>Marks (0-100)</label>
+                                <input type="number" id="reg-marks" required min="0" max="100" placeholder="e.g. 85">
+                            </div>
+                            <div class="form-group form-btn-group">
+                                <button type="submit" class="primary-btn">Register</button>
+                            </div>
+                        </form>
+                        <div id="reg-result" class="result-box hidden"></div>
+                    </div>
+                </section>
+
+                <!-- 2. Course Enrollment -->
+                <section id="enrollment" class="view-section">
+                    <h1 class="page-title">Course Enrollment</h1>
+                    <p class="page-subtitle">Enroll in up to 5 courses.</p>
+                    <div class="card">
+                        <h3 class="card-title">Add Course</h3>
+                        <form id="enroll-form" class="form-row">
+                            <div class="form-group" style="flex:2">
+                                <label>Course Name</label>
+                                <input type="text" id="enr-course" required placeholder="e.g. Algorithms">
+                            </div>
+                            <div class="form-group">
+                                <label>Credits</label>
+                                <input type="number" id="enr-credits" required min="1" max="6">
+                            </div>
+                            <div class="form-group form-btn-group">
+                                <button type="submit" class="primary-btn">Add</button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="card" style="margin-top:1.5rem">
+                        <h3 class="card-title" id="enrolled-title">Enrolled (0/5) — 0 credits</h3>
+                        <div id="enrolled-list"></div>
+                        <p id="enrolled-empty" class="text-muted">No courses enrolled yet.</p>
+                    </div>
+                </section>
+
+                <!-- 3. Student Records -->
+                <section id="records" class="view-section">
+                    <h1 class="page-title">Student Records</h1>
+                    <p class="page-subtitle">Manage records and event participation sets.</p>
+                    <div class="card">
+                        <h3 class="card-title">Add Student</h3>
+                        <form id="student-form" class="form-row">
+                            <div class="form-group">
+                                <label>Name</label>
+                                <input type="text" id="sr-name" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Age</label>
+                                <input type="number" id="sr-age" required min="15" max="40">
+                            </div>
+                            <div class="form-group">
+                                <label>Grade</label>
+                                <select id="sr-grade">
+                                    <option value="A">A</option>
+                                    <option value="B">B</option>
+                                    <option value="C">C</option>
+                                    <option value="D">D</option>
+                                    <option value="F">F</option>
+                                </select>
+                            </div>
+                            <div class="form-group" style="flex:2">
+                                <label>Events (comma-separated)</label>
+                                <input type="text" id="sr-events" placeholder="Hackathon, Music">
+                            </div>
+                        </form>
+                        <button type="button" id="btn-add-student" class="primary-btn" style="margin-top:1rem">Add Student</button>
+                    </div>
+                    <div class="card" style="margin-top:1.5rem">
+                        <h3 class="card-title">Records</h3>
+                        <div id="student-records-table"></div>
+                    </div>
+                    <div class="stats-grid" style="margin-top:1.5rem" id="student-stats"></div>
+                </section>
+
+                <!-- 4. Search & Sort -->
+                <section id="search-sort" class="view-section">
+                    <h1 class="page-title">Search & Sort</h1>
+                    <p class="page-subtitle">Bubble Sort plus Linear & Binary search.</p>
+                    <div class="card">
+                        <h3 class="card-title">Input</h3>
+                        <div class="form-group">
+                            <label>Student IDs (comma or space separated)</label>
+                            <textarea id="ss-ids" rows="3" placeholder="e.g. 105, 23, 88, 47, 12, 91, 6, 73, 30, 58">105, 23, 88, 47, 12, 91, 6, 73, 30, 58</textarea>
+                        </div>
+                        <div class="form-group" style="max-width:250px">
+                            <label>Search Target ID</label>
+                            <input type="number" id="ss-target" value="47">
+                        </div>
+                        <button id="btn-run-ss" class="primary-btn">Run</button>
+                    </div>
+                    <div id="ss-results" class="hidden">
+                        <div class="results-grid" style="margin-top:1.5rem">
+                            <div class="card">
+                                <h3 class="card-title">Original</h3>
+                                <div id="ss-original" class="badge-list"></div>
+                            </div>
+                            <div class="card">
+                                <h3 class="card-title">Sorted (Bubble)</h3>
+                                <div id="ss-sorted" class="badge-list"></div>
+                            </div>
+                        </div>
+                        <div class="results-grid" style="margin-top:1rem">
+                            <div class="card">
+                                <h3 class="card-title">Linear Search</h3>
+                                <p id="ss-linear"></p>
+                            </div>
+                            <div class="card">
+                                <h3 class="card-title">Binary Search</h3>
+                                <p id="ss-binary"></p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 5. Fee Calculator -->
+                <section id="fees" class="view-section">
+                    <h1 class="page-title">Fee Calculator</h1>
+                    <p class="page-subtitle">Calculate total fees using functions.</p>
+                    <div class="card">
+                        <h3 class="card-title">Enter Fee Components</h3>
+                        <form id="fee-form" class="form-row">
+                            <div class="form-group">
+                                <label>Tuition Fee (₹)</label>
+                                <input type="number" id="fee-tuition" required min="0" value="0">
+                            </div>
+                            <div class="form-group">
+                                <label>Hostel Fee (₹)</label>
+                                <input type="number" id="fee-hostel" required min="0" value="0">
+                            </div>
+                            <div class="form-group">
+                                <label>Transport Fee (₹)</label>
+                                <input type="number" id="fee-transport" required min="0" value="0">
+                            </div>
+                            <div class="form-group form-btn-group">
+                                <button type="submit" class="primary-btn">Calculate Total</button>
+                            </div>
+                        </form>
+                        <div id="fee-result" class="result-box hidden"></div>
+                    </div>
+                </section>
+
+                <!-- 6. Academic Records -->
+                <section id="academic-records" class="view-section">
+                    <h1 class="page-title">Academic Records</h1>
+                    <p class="page-subtitle">Track marks and view a class report.</p>
+                    <div class="card">
+                        <h3 class="card-title">Add Record</h3>
+                        <form id="academic-form" class="form-row">
+                            <div class="form-group">
+                                <label>Student ID</label>
+                                <input type="text" id="ac-id" required placeholder="e.g. S001">
+                            </div>
+                            <div class="form-group">
+                                <label>Name</label>
+                                <input type="text" id="ac-name" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Marks</label>
+                                <input type="number" id="ac-marks" required min="0" max="100">
+                            </div>
+                            <div class="form-group form-btn-group">
+                                <button type="submit" class="primary-btn">Add</button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="stats-grid" style="margin-top:1.5rem" id="academic-stats"></div>
+                    <div class="card" style="margin-top:1.5rem">
+                        <h3 class="card-title">Records</h3>
+                        <div id="academic-table"></div>
+                    </div>
+                </section>
+
+                <!-- 7. Directory Scanner -->
+                <section id="directory" class="view-section">
+                    <h1 class="page-title">Directory Scanner</h1>
+                    <p class="page-subtitle">Scan directories with exception handling.</p>
+                    <div class="card">
+                        <h3 class="card-title">Scan</h3>
+                        <form id="scan-form">
+                            <div class="form-group" style="max-width:400px">
+                                <label>Directory Path</label>
+                                <input type="text" id="scan-path" required placeholder="e.g. . or /invalid/path">
+                            </div>
+                            <button type="submit" class="primary-btn">Scan Directory</button>
+                        </form>
+                        <div id="scan-result" class="result-box hidden"></div>
+                    </div>
+                </section>
+
+                <!-- 8. Performance Analytics -->
+                <section id="analytics" class="view-section">
+                    <h1 class="page-title">Performance Analytics</h1>
+                    <p class="page-subtitle">Subject-wise marks and top performers.</p>
+                    <div class="card">
+                        <h3 class="card-title">Add Student Marks</h3>
+                        <form id="analytics-form" class="form-row">
+                            <div class="form-group">
+                                <label>Name</label>
+                                <input type="text" id="an-name" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Math</label>
+                                <input type="number" id="an-math" required min="0" max="100">
+                            </div>
+                            <div class="form-group">
+                                <label>Science</label>
+                                <input type="number" id="an-science" required min="0" max="100">
+                            </div>
+                            <div class="form-group">
+                                <label>English</label>
+                                <input type="number" id="an-english" required min="0" max="100">
+                            </div>
+                            <div class="form-group form-btn-group">
+                                <button type="submit" class="primary-btn">Add</button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="card" style="margin-top:1.5rem">
+                        <h3 class="card-title">Average Score per Student</h3>
+                        <div class="chart-wrapper">
+                            <canvas id="analytics-chart"></canvas>
+                        </div>
+                    </div>
+                    <div class="stats-grid" style="margin-top:1.5rem" id="analytics-top"></div>
+                </section>
+
+            </div>
+        </main>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
